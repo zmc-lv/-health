@@ -225,23 +225,7 @@
             },
             //钩子函数，VUE对象初始化完成后自动执行
             created() {
-                // 发送请求到后台获取检查项列表数据，
-                // 查询数据get, 条件查询post(复杂查询条件), post:修改或创建数据
-                axios.get('/checkitem/findAll.do').then(res => {
-                    // 把返回的结果(list<checkitem>)绑定到dataList属性即可
-                    //返回的结果 res.data=result{flag,message,data}
-                    var result = res.data;
-                    if(result.flag){
-                        // 成功
-                        //绑定数据
-                        this.dataList = result.data;
-                    }else{
-                        this.$message({
-                            message: result.message,
-                            type: "error"
-                        })
-                    }
-                })
+              this.findPage();
             },
             methods: {
                 //编辑
@@ -249,15 +233,62 @@
                 },
                 //添加
                 handleAdd () {
+                    //请求添加
+                    //表单校验
+                    this.$refs['dataAddForm'].validate((valid) =>{
+                        if (valid) {
+                          //请求添加
+                            //使用ajax提交json数据，=》requestBody
+                            axios.post('/checkitem/add.do',this.formData).then(res=>{
+                                //提示操作结果
+                                this.$message({
+                                    message: res.data.message,
+                                    type: res.data.flag?"success":"error"
+                                });
+                                if (res.data.flag) {
+                                    //成功
+                                    //关闭窗口
+                                    this.dialogFormVisible = false;
+                                    //刷新列表数据
+                                    this.findPage();
+                                }
+                            })
+                        }
+                    });
+
                 },
                 //分页查询
                 findPage() {
+                    // 发送请求到后台获取检查项列表数据，
+                    // 查询数据get, 条件查询post(复杂查询条件), post:修改或创建数据
+                    axios.get('/checkitem/findAll.do').then(res => {
+                        // 把返回的结果(list<checkitem>)绑定到dataList属性即可
+                        //返回的结果 res.data=result{flag,message,data}
+                        var result = res.data;
+                        if(result.flag){
+                            // 成功
+                            //绑定数据
+                            this.dataList = result.data;
+                        }else{
+                            this.$message({
+                                message: result.message,
+                                type: "error"
+                            })
+                        }
+                    })
                 },
                 // 重置表单
                 resetForm() {
+                    this.formData = {};
                 },
                 // 弹出添加窗口
                 handleCreate() {
+                    this.resetForm();
+                    //弹出窗口
+                    vue.dialogFormVisible = true;
+                    //发送post请求
+
+
                 },
                 // 弹出编辑窗口
                 handleUpdate(row) {

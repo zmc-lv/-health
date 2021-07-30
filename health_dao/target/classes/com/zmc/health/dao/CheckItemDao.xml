@@ -6,4 +6,10 @@
     <select id="findAll" resultType="checkitem">
         select * from t_checkitem
     </select>
+
+    <insert id="add" parameterType="checkitem">
+        insert into t_checkitem(code,name,sex,age,price,type,remark,attention)
+        values
+            (#{code},#{name},#{sex},#{age},#{price},#{type},#{remark},#{attention})
+    </insert>
 </mapper>

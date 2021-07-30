@@ -16,4 +16,10 @@ public interface CheckItemService {
      * @return
      */
     List<CheckItem> findAll();
+
+    /**
+     * 新增检查项
+     * @param checkItem
+     */
+    void add(CheckItem checkItem);
 }
