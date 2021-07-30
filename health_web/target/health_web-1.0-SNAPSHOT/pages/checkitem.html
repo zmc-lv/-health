@@ -27,7 +27,7 @@
                 <div class="box">
                     <div class="filter-container">
                         <el-input placeholder="项目编码/项目名称" v-model="pagination.queryString" style="width: 200px;" class="filter-item"></el-input>
-                        <el-button @click="findPage()" class="dalfBut">查询</el-button>
+                        <el-button @click="handleCurrentChange(1)" class="dalfBut">查询</el-button>
                         <el-button type="primary" class="butT" @click="handleCreate()">新建</el-button>
                     </div>
                     <el-table size="small" current-row-key="id" :data="dataList" stripe highlight-current-row>
@@ -230,6 +230,27 @@
             methods: {
                 //编辑
                 handleEdit() {
+                    //表单校验
+                    this.$refs['dataEditForm'].validate((valid) =>{
+                        if (valid) {
+                            //请求添加
+                            axios.post('/checkitem/update.do',this.formData).then(res=>{
+                                //提示操作结果
+                                this.$message({
+                                    message: res.data.message,
+                                    type: res.data.flag?"success":"error"
+                                });
+                                if (res.data.flag) {
+                                    //成功
+                                    //关闭窗口
+                                    this.dialogFormVisible4Edit = false;
+                                    //刷新列表数据
+                                    this.findPage();
+                                }
+                            })
+                        }
+                    });
+
                 },
                 //添加
                 handleAdd () {
@@ -259,9 +280,21 @@
                 },
                 //分页查询
                 findPage() {
+                    axios.post('/checkitem/findPage.do',this.pagination).then(res=>{
+                        if (res.data.flag) {
+                            //绑定总记录数
+                            this.pagination.total = res.data.data.total;
+                            //查询的结果集
+                            this.dataList = res.data.data.rows;
+                        }else {
+                            this.$message.error(res.data.message);
+                        }
+
+                    })
+
                     // 发送请求到后台获取检查项列表数据，
                     // 查询数据get, 条件查询post(复杂查询条件), post:修改或创建数据
-                    axios.get('/checkitem/findAll.do').then(res => {
+                   /* axios.get('/checkitem/findAll.do').then(res => {
                         // 把返回的结果(list<checkitem>)绑定到dataList属性即可
                         //返回的结果 res.data=result{flag,message,data}
                         var result = res.data;
@@ -275,7 +308,7 @@
                                 type: "error"
                             })
                         }
-                    })
+                    })*/
                 },
                 // 重置表单
                 resetForm() {
@@ -292,12 +325,46 @@
                 },
                 // 弹出编辑窗口
                 handleUpdate(row) {
+                   var id = row.id;//编辑的检查项id
+                    this.resetForm();
+                    this.dialogFormVisible4Edit = true;
+                    axios.get('/checkitem/findById.do?id='+id).then(res=>{
+                        if (res.data.flag) {
+                            //绑定数据到表单
+                            this.formData = res.data.data;
+                        }else {
+                            this.$message.error(res.data.message);
+                        }
+                    })
+
                 },
                 //切换页码
                 handleCurrentChange(currentPage) {
+                    //改变页码
+                    this.pagination.currentPage = currentPage;
+                    this.findPage();
                 },
                 // 删除
                 handleDelete(row) {
+                    var id =row.id;
+                    this.$confirm('此操作将【永久删除】该检查项, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        //点击确定时调用
+                        axios.post('/checkitem//deleteById.do?id='+id).then(res=>{
+                            this.$message({
+                                message: res.data.message,
+                                type: res.data.flag?"success":"error"
+                            });
+                            if (res.data.flag) {
+                                this.findPage();
+                            }
+                        })
+                    }).catch(() => {
+
+                    });
                 }
             }
         })

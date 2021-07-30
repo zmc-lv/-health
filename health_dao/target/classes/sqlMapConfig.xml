@@ -7,6 +7,7 @@
         <plugin interceptor="com.github.pagehelper.PageHelper">
             <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL 六种数据库-->
             <property name="dialect" value="mysql"/>
+            <property name="reasonable" value="true"/>
         </plugin>
     </plugins>
 </configuration>
