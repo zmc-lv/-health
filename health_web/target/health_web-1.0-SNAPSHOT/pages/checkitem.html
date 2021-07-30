@@ -25,13 +25,11 @@
             </div>
             <div class="app-container">
                 <div class="box">
-                    <!--查询与新建-->
                     <div class="filter-container">
                         <el-input placeholder="项目编码/项目名称" v-model="pagination.queryString" style="width: 200px;" class="filter-item"></el-input>
                         <el-button @click="findPage()" class="dalfBut">查询</el-button>
                         <el-button type="primary" class="butT" @click="handleCreate()">新建</el-button>
                     </div>
-                    <!--列表数据-->
                     <el-table size="small" current-row-key="id" :data="dataList" stripe highlight-current-row>
                         <el-table-column type="index" align="center" label="序号"></el-table-column>
                         <el-table-column prop="code" label="项目编码" align="center"></el-table-column>
@@ -50,7 +48,6 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                    <!--分页工具栏-->
                     <div class="pagination-container">
                         <el-pagination
                             class="pagiantion"
@@ -228,14 +225,21 @@
             },
             //钩子函数，VUE对象初始化完成后自动执行
             created() {
-                //发送请求
-                axios.get("/checkitem/findAll.do").then(res=>{
-                    //判断是否成功 res.data=>Result(flag,message,data)
-                    if (res.data.flag) {
+                // 发送请求到后台获取检查项列表数据，
+                // 查询数据get, 条件查询post(复杂查询条件), post:修改或创建数据
+                axios.get('/checkitem/findAll.do').then(res => {
+                    // 把返回的结果(list<checkitem>)绑定到dataList属性即可
+                    //返回的结果 res.data=result{flag,message,data}
+                    var result = res.data;
+                    if(result.flag){
+                        // 成功
                         //绑定数据
-                        this.dataList = res.data.data;
-                    }else {
-                        this.$message.error(res.data.message);
+                        this.dataList = result.data;
+                    }else{
+                        this.$message({
+                            message: result.message,
+                            type: "error"
+                        })
                     }
                 })
             },
