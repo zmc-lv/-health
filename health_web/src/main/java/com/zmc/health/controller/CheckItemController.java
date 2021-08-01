@@ -94,13 +94,7 @@ public class CheckItemController {
      */
     @PostMapping("/deleteById")
     public Result deleteById(int id){
-        try {
-            checkItemService.deleteById(id);
-        } catch (MyException e) {
-            e.printStackTrace();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-        return new Result(true,MessageConstant.DELETE_CHECKITEM_SUCCESS);
+       checkItemService.deleteById(id);
+       return new Result(true, MessageConstant.DELETE_CHECKITEM_SUCCESS);
     }
 }

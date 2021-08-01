@@ -85,16 +85,13 @@ public class CheckItemServiceImpl implements CheckItemService {
      */
     @Override
     public void deleteById(int id) {
-        //先判断这个检查项是否被检查组使用了
-        //调用dao查询检查项的id是否在t_checkgroup_checkitem表中存在记录
-        int cnt = checkItemDao.findCountByCheckItemId(id);
-        //被使用了则不能删除
-        if(cnt > 0){
-            // 已经被检查组使用了，则不能删除，报错
-            //??? health_web能捕获到这个异常吗？
+        // 判断 是否被检查组使用了
+        int count = checkItemDao.findCountByCheckItemId(id);
+        // count > 0 被使用了，报错
+        if(count > 0){
             throw new MyException("该检查项被检查组使用了，不能删除");
         }
-        //没使用就可以调用dao删除
+        // =0，则可以删除
         checkItemDao.deleteById(id);
     }
 
