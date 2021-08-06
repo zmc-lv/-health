@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+		  http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+		 version="3.0">
+
+	<filter>
+		<!--  filter-name：固定为springSecurityFilterChain,不能修改。容器启动时，
+        会从spring容器中获取这个filtername的bean对象（security启动时创建的bean name)
+        可以修改：必须在spring容器中配置一个bean对象为你修改后的名称
+              -->
+		<filter-name>springSecurityFilterChain</filter-name>
+		<!--   代理过滤：
+                 自己不干活，拦截的请求转给security的过滤器(springSecurityFilterChain)去处理
+         -->
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 使用DispatcherServlet或者使用contextLoaderListener 都一样，只要启动容器即可   -->
+	<servlet>
+		<servlet-name>dispatchServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<!-- 启动spring容器，要导入spring-security.xml的配置文件 -->
+			<param-value>classpath:spring-security.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>dispatchServlet</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+</web-app>

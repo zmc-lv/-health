@@ -124,4 +124,14 @@ public class CheckGroupServiceImpl implements CheckGroupService {
         //再删除检查组
         checkGroupDao.deleteById(id);
     }
+
+    /**
+     * 查询所有检查组
+     * @return
+     */
+    @Override
+    public List<CheckGroup> findAll() {
+
+        return checkGroupDao.findAll();
+    }
 }
