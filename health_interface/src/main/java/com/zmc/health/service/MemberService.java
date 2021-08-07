@@ -2,6 +2,8 @@ package com.zmc.health.service;
 
 import com.zmc.health.pojo.Member;
 
+import java.util.List;
+
 /**
  * 包名: com.zmc.health.service
  *
@@ -21,4 +23,11 @@ public interface MemberService {
      * @param member
      */
     void add(Member member);
+
+    /**
+     *
+     * @param months
+     * @return
+     */
+    List<Integer> getMemberReport(List<String> months);
 }

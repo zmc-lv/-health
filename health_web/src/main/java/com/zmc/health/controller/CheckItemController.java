@@ -5,9 +5,11 @@ import com.zmc.health.constant.MessageConstant;
 import com.zmc.health.entity.PageResult;
 import com.zmc.health.entity.QueryPageBean;
 import com.zmc.health.entity.Result;
-import com.zmc.health.exception.MyException;
 import com.zmc.health.pojo.CheckItem;
 import com.zmc.health.service.CheckItemService;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,6 +59,9 @@ public class CheckItemController {
      */
     @PostMapping("findPage")
     public Result findPage(@RequestBody QueryPageBean queryPageBean){
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        User user = (User) securityContext.getAuthentication().getPrincipal();
+        System.out.println("登录的用户名=========" + user.getUsername());
         //调用服务查询
         PageResult<CheckItem> result = checkItemService.findPage(queryPageBean);
         //返回结果给页面

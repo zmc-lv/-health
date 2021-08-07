@@ -75,11 +75,18 @@
         select count(id) from t_order where orderDate &gt;= #{value} and orderStatus = '已到诊'
     </select>
 
-    <!--热门套餐，查询前5条-->
+    <!--统计日期范围内预约数量-->
+    <select id="findOrderCountBetweenDate" parameterType="string" resultType="int">
+        select count(id) from t_order where orderDate between #{startDate} and #{endDate}
+    </select>
+
+    <!-- 修改查询热门套餐的sql 如下-->
+    <!--热门套餐，查询前4条-->
     <select id="findHotSetmeal" resultType="map">
-        select s.name, count(o.id) setmeal_count ,count(o.id)/(select count(id) from t_order) proportion
-          from t_order o inner join t_setmeal s on s.id = o.setmeal_id
-          group by o.setmeal_id
-          order by setmeal_count desc limit 0,4
+        select s.name, count(o.id) setmeal_count ,count(o.id)/t.total proportion,s.remark
+        from t_order o, t_setmeal s,(select count(id) total from t_order) t
+        where s.id = o.setmeal_id
+        group by o.setmeal_id
+        order by setmeal_count desc limit 0,4
     </select>
 </mapper>

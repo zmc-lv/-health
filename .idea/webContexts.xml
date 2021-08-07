@@ -5,6 +5,7 @@
       <map>
         <entry key="file://$PROJECT_DIR$/health_mobile/src/main/webapp/pages/orderSuccess.html" value="file://$PROJECT_DIR$/health_mobile/src/main/webapp/pages" />
         <entry key="file://$PROJECT_DIR$/health_web/src/main/webapp/pages/ordersetting.html" value="file://$PROJECT_DIR$/health_web/src/main/webapp/pages" />
+        <entry key="file://$PROJECT_DIR$/health_web/src/main/webapp/pages/report_business.html" value="file://$PROJECT_DIR$/health_web/src/main/webapp/pages" />
       </map>
     </option>
   </component>

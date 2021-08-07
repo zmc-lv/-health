@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 包名: com.zmc.health.service.impl
@@ -147,5 +148,14 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     public Setmeal findDetailById(int id) {
         return setmealDao.findDetailById(id);
+    }
+
+    /**
+     * 套餐预约占比
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getSetmealReport() {
+        return setmealDao.getSetmealReport();
     }
 }

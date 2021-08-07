@@ -9,7 +9,6 @@
         <module name="health_web" />
         <module name="health_interface" />
         <module name="health_service" />
-        <module name="springsecurity_demo" />
         <module name="health_pojo" />
         <module name="health_dao" />
         <module name="health_common" />
@@ -17,5 +16,8 @@
         <module name="health_jobs" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="springsecurity_demo" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

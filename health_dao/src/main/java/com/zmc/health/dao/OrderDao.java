@@ -1,6 +1,7 @@
 package com.zmc.health.dao;
 
 import com.zmc.health.pojo.Order;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -14,4 +15,10 @@ public interface OrderDao {
     public Integer findVisitsCountByDate(String date);
     public Integer findVisitsCountAfterDate(String date);
     public List<Map> findHotSetmeal();
+
+    /**
+     * 通过日期范围查询预约数
+     * @return
+     */
+    Integer findOrderCountBetweenDate(@Param("startDate") String startDate,@Param("endDate") String endDate);
 }

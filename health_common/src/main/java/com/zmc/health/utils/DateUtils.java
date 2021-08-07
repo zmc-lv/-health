@@ -293,4 +293,14 @@ public class DateUtils {
             e.printStackTrace();
         }
     }
+//获得本月最后一日的日期
+    public static Date getLastDayOfThisMonth() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH,1);
+        //下个月的一号
+        calendar.add(Calendar.MONTH,1);
+        //再减一天
+        calendar.add(Calendar.DATE,-1);
+        return calendar.getTime();
+    }
 }
