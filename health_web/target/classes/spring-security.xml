@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+    <security:http pattern="/login.html" security="none"/>
+    <security:http pattern="/css/**" security="none"/>
+    <security:http pattern="/img/**" security="none"/>
+    <security:http pattern="/js/**" security="none"/>
+    <security:http pattern="/plugins/**" security="none"/>
+    <security:http pattern="/user/loginFail.do" security="none"/>
+
+    <security:http auto-config="true" use-expressions="true">
+
+        <!--只要认证通过就可以访问-->
+        <security:intercept-url pattern="/**"  access="isAuthenticated()" />
+        <security:form-login
+                login-page="/login.html"
+                login-processing-url="/login.do"
+                username-parameter="username"
+                password-parameter="password"
+                authentication-failure-url="/user/loginFail.do"
+                default-target-url="/user/loginSuccess.do"
+                always-use-default-target="true"
+        />
+        <security:headers>
+            <!--文档嵌套访问策略
+                SAMEORIGIN: 同源 同一个网站
+                DENY: 不允许文档嵌套
+                ALLOW-FROM: 指定可访问的规则
+            -->
+            <security:frame-options policy="SAMEORIGIN"/>
+        </security:headers>
+        <!--关闭跨域访问控制-->
+        <security:csrf disabled="true"/>
+        <security:logout logout-url="/logout" invalidate-session="true" logout-success-url="/login.html"/>
+    </security:http>
+
+    <!--开启权限验证的注解支持-->
+    <security:global-method-security pre-post-annotations="enabled"/>
+
+    <!--  认证管理器  -->
+    <security:authentication-manager>
+        <!--用户信息的提供者
+            user-service-ref: 用户服务指定由容器中的bean对象来提供用户信息
+        -->
+        <security:authentication-provider user-service-ref="springSecurityUserService">
+            <security:password-encoder ref="encoder"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+</beans>
