@@ -46,7 +46,7 @@
 
     <!--根据预约id查询预约信息，包括体检人信息、套餐信息-->
     <select id="findById4Detail" parameterType="int" resultType="map">
-        select m.name member ,s.name setmeal,
+        select m.name member ,s.name setmeal,o.setmeal_id,
                DATE_FORMAT(o.orderDate,'%Y-%m-%d') orderDate,o.orderType
         from
             t_order o,

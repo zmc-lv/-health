@@ -1,11 +1,17 @@
 package com.zmc.health.controller;
 
+
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.zmc.health.constant.MessageConstant;
 import com.zmc.health.entity.Result;
 import com.zmc.health.service.MemberService;
 import com.zmc.health.service.ReportService;
 import com.zmc.health.service.SetmealService;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -19,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -185,5 +192,29 @@ public class ReportController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @GetMapping("/exportPDF")
+    public void exportPDF(HttpServletRequest req,HttpServletResponse res) throws Exception {
+        //  查询报名数据
+        Map<String, Object> reportData = reportService.getBusinessReportData();
+        //  模板路径
+        String template = req.getSession().getServletContext().getRealPath("/template");
+        String jrxml = template+ File.separator + "health_business3.jrxml";
+        //  定义编译后的路径
+        String jasper = template+ File.separator + "health_business3.jasper";
+        //  编译
+        JasperCompileManager.compileReportToFile(jrxml,jasper);
+        //  填充数据
+        List<Map> hotSetmeal = (List<Map>) reportData.get("hotSetmeal");
+        JasperPrint print = JasperFillManager.fillReport(jasper,reportData,new JRBeanCollectionDataSource(hotSetmeal));
+        //  设置内容体，设置响应头
+        res.setContentType("application/pdf");
+        res.setHeader("Context-Disposition","attachment;filename=businessReport.pdf");
+        //  导出pdf ，用到outputStream
+        JasperExportManager.exportReportToPdfStream(print,res.getOutputStream());
+
+
+
     }
 }

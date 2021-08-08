@@ -26,6 +26,6 @@ public interface OrderService {
      * @param id
      * @return
      */
-    Map<String, String> findOrderDetailById(int id);
+    Map<String, Object> findOrderDetailById(int id);
 
 }

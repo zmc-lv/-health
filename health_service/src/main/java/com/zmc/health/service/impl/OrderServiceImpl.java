@@ -124,7 +124,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public Map<String, String> findOrderDetailById(int id) {
+    public Map<String, Object> findOrderDetailById(int id) {
         return orderDao.findById4Detail(id);
     }
 

@@ -31,7 +31,8 @@
             <div class="contentBox">
                 <div class="notice-article">
                     <div class="info-title">
-                        <span class="name">体检预约成功</span>
+                        <span class="name">体检预约成功&nbsp;&nbsp; <button @click="exportPdf">导出预约订单信息</button></span>
+
                     </div>
                     <div class="notice-item">
                         <div class="item-title">预约信息</div>
@@ -68,6 +69,13 @@
 
                 }
             },
+            methods:{
+                //导出pdf
+                exportPdf(){
+                    location.href="/order/exportPdf.do?id="+id;
+                }
+            },
+
             mounted(){
                 axios.get("/order/findById.do?id=" + id).then((res) => {
                     if(res.data.flag){

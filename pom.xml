@@ -44,6 +44,13 @@
     <!-- 依赖管理标签  必须加 -->
     <dependencyManagement>
         <dependencies>
+            <!--导入Itext报表-->
+            <dependency>
+                <groupId>com.lowagie</groupId>
+                <artifactId>itext</artifactId>
+                <version>2.1.7</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>

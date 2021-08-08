@@ -29,4 +29,16 @@ public class UserController {
         String username = user.getUsername();
         return new Result(true, MessageConstant.GET_USERNAME_SUCCESS,username);
     }
+
+    @RequestMapping("/loginFail")
+    public Result loginFail(){
+        return  new Result(false,"用户名或密码错误");
+    }
+
+    @RequestMapping("/loginSuccess")
+    public Result loginSuccess(){
+        return  new Result(true,"用户登录成功");
+    }
+
+
 }
